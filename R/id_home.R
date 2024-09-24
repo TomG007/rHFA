@@ -101,10 +101,6 @@
 #' - `'rel_<pheno>'`: The relative phenotype value of each variety within each site-year.
 #' - `'is_home'`: Logical column indicating whether a site is a variety's home site.
 #'
-# Example usage of the function:
-# df <- data.frame(site = rep(c("A", "B", "C"), each = 5), year = rep(1:5, 3), geno = rep(c("X", "Y", "Z"), each = 5), pheno = rnorm(15))
-# df <- id_home(df, site = "site", year = "year", geno = "geno", pheno = "pheno", blup = TRUE, verbose = TRUE, parallel = TRUE)
-#'
 #' @import parallel
 #' @import lme4
 #' @importFrom stats coef

@@ -108,6 +108,7 @@
 #' @import parallel
 #' @import lme4
 #' @importFrom stats coef
+#' @export
 
 id_home <- function(df, site, year, geno, pheno, blup = TRUE, verbose = TRUE, parallel = TRUE) {
 

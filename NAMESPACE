@@ -3,6 +3,7 @@
 export(filter_site_years)
 export(get_home_site)
 export(get_ss)
+export(id_home)
 export(measure_home_distance)
 export(permute_hfa)
 import(Matrix)

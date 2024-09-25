@@ -95,56 +95,37 @@
 #' @param pheno A character string indicating the column name for phenotype (e.g., yield, biomass).
 #' @param blup A logical indicating whether to use shrinkage estimates (default is TRUE).
 #' @param verbose A logical indicating whether to print messages (default is TRUE).
-#' @param parallel A logical indicating whether to perform parallel processing (default is TRUE).
 #'
 #' @return A data frame with two new columns:
 #' - `'rel_<pheno>'`: The relative phenotype value of each variety within each site-year.
 #' - `'is_home'`: Logical column indicating whether a site is a variety's home site.
 #'
-#' @import parallel
 #' @import lme4
+#' @importFrom data.table rbindlist
 #' @importFrom stats coef
 #' @export
 
-id_home <- function(df, site, year, geno, pheno, blup = TRUE, verbose = TRUE, parallel = TRUE) {
+id_home <- function(df, site, year, geno, pheno, blup = TRUE, verbose = TRUE) {
 
   # Create the relative phenotype column name
   rel_colname <- paste0('rel_', pheno)
 
-  # Set up parallel processing based on the OS
-  ncpu <- ifelse(parallel, detectCores() - 1, 1)
-  if (.Platform$OS.type == "windows") {
-    cl <- makeCluster(ncpu)
-    par_fun <- parLapply
-  } else {
-    par_fun <- mclapply  # For Unix-based systems, use mclapply
-  }
-
   # Make site-year vector for splitting the data
   site_year <- paste(df[, site], df[, year], sep = '_')
 
-  # Center and scale performance within site-year
+  # Center and scale performance within site-year using lapply
   df_list <- split(df, site_year)
-
-  # Apply scaling in parallel or sequentially based on the OS
-  df_list <- par_fun(cl, df_list, function(x) .scale_pheno(x, pheno))
+  df_list <- lapply(df_list, function(x) .scale_pheno(x, pheno))
 
   # Merge the data frames back together
-  df <- do.call(rbind, df_list)
+  df <- rbindlist(df_list)
 
   # Find the highest relative phenotype for each genotype
   geno_list <- split(df, df[, geno])
-
-  # Apply the home site identification in parallel or sequentially based on the OS
-  geno_list <- par_fun(cl, geno_list, function(x) .id_top_pheno(x, site, rel_colname, blup, verbose))
+  geno_list <- lapply(geno_list, function(x) .id_top_pheno(x, site, rel_colname, blup, verbose))
 
   # Merge the data frames back together
-  df <- do.call(rbind, geno_list)
-
-  # Stop the cluster if it's a Windows system
-  if (.Platform$OS.type == "windows") {
-    stopCluster(cl)
-  }
+  df <- rbindlist(df_list)
 
   return(df)
 }

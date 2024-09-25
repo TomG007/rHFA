@@ -4,16 +4,7 @@
 \alias{id_home}
 \title{Identify the Home Site Based on the Highest Relative Phenotype Value}
 \usage{
-id_home(
-  df,
-  site,
-  year,
-  geno,
-  pheno,
-  blup = TRUE,
-  verbose = TRUE,
-  parallel = TRUE
-)
+id_home(df, site, year, geno, pheno, blup = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{df}{A data frame containing performance data by site, year, variety, etc.}
@@ -29,8 +20,6 @@ id_home(
 \item{blup}{A logical indicating whether to use shrinkage estimates (default is TRUE).}
 
 \item{verbose}{A logical indicating whether to print messages (default is TRUE).}
-
-\item{parallel}{A logical indicating whether to perform parallel processing (default is TRUE).}
 }
 \value{
 A data frame with two new columns:

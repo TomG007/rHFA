@@ -40,8 +40,6 @@
 
 .id_top_pheno <- function(x, site, pheno, blup = TRUE, verbose = TRUE) {
 
-  # Ensure necessary libraries are loaded
-
   # Coerce to data.frame and ensure factors are properly handled
   x <- as.data.frame(x, stringsAsFactors = FALSE)
   x[, site] <- factor(x[, site])
@@ -75,12 +73,19 @@
     site_effects <- tapply(x[, pheno], x[, site], mean, simplify = TRUE)
   }
 
-  # Identify the site with the maximum mean
-  max_site <- names(site_effects)[which.max(site_effects)]
-  x$is_home <- x[, site] == max_site
+  # Handle case where all site_effects are NA
+  if (all(is.na(site_effects))) {
+    if (verbose) message("All site effects are NA. Unable to identify a home site.")
+    x$is_home <- FALSE  # or another appropriate value
+  } else {
+    # Identify the site with the maximum mean
+    max_site <- names(site_effects)[which.max(site_effects)]
+    x$is_home <- x[, site] == max_site
+  }
 
   return(x)
 }
+
 
 
 #' @title Identify the Home Site Based on the Highest Relative Phenotype Value

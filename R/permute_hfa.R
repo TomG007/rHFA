@@ -228,7 +228,28 @@ permute_hfa <- function(data,
                'site' = as.formula(paste("~", geno, "+ site:is_home")))
 
   # Select and format data into list of data frames for each population
-  data_subset <- na.omit(data[, c(site, year, geno, pheno, popn)])
+
+
+  #
+  #  begin new code
+  #
+
+  if (!is.na(popn)) {
+    data_subset <- na.omit(data[, c(site, year, geno, pheno, popn)])
+  } else {
+    data_subset <- na.omit(data[, c(site, year, geno, pheno)])
+  }
+
+  print(str(data_subset))  # Check structure after subsetting
+
+  setDT(data_subset)  # Convert to data.table
+
+  #
+  #  end new code, uncomment following line
+  #
+
+
+#  data_subset <- na.omit(data[, c(site, year, geno, pheno, popn)])
 
   if (!is.na(popn)) {
     data_list <- split(data_subset, data_subset[, popn])

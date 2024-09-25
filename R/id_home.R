@@ -8,14 +8,14 @@
 #' @param pheno A string specifying the name of the column in `x` to scale (the phenotype).
 #'
 #' @return A data frame with an additional column containing the scaled values of the specified phenotype.
-#' The new column will be named rel_<pheno>`.
+#' The new column will be named `rel_<pheno>`.
 
 .scale_pheno <- function(x, pheno) {
   # Create a new column name by prefixing 'rel_' to the name of the phenotype column
   colname <- paste0('rel_', pheno)
 
-  # Scale the values of the specified phenotype column and assign them to the new column
-  x[, colname] <- scale(x[, pheno])
+  # Scale the values of the specified phenotype column using get()
+  x[, (colname) := scale(get(pheno))]
 
   # Return the updated data frame
   return(x)
@@ -39,6 +39,7 @@
 #' whether each observation corresponds to the identified home site.
 
 .id_top_pheno <- function(x, site, pheno, blup = TRUE, verbose = TRUE) {
+
   # Ensure necessary libraries are loaded
 
   # Coerce to data.frame and ensure factors are properly handled
@@ -102,7 +103,6 @@
 #'
 #' @import lme4
 #' @importFrom data.table rbindlist setDT
-#' @importFrom stats coef
 #' @export
 
 id_home <- function(df, site, year, geno, pheno, blup = TRUE, verbose = TRUE) {

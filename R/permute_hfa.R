@@ -235,9 +235,11 @@ permute_hfa <- function(data,
   #
 
   if (!is.na(popn)) {
+    print("popn is na")
     data_subset <- na.omit(data[, c(site, year, geno, pheno, popn)])
   } else {
     data_subset <- na.omit(data[, c(site, year, geno, pheno)])
+    print("popn is NOT na")
   }
 
   print(str(data_subset))  # Check structure after subsetting

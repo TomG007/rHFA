@@ -101,31 +101,34 @@
 #' - `'is_home'`: Logical column indicating whether a site is a variety's home site.
 #'
 #' @import lme4
-#' @importFrom data.table rbindlist
+#' @importFrom data.table rbindlist setDT
 #' @importFrom stats coef
 #' @export
 
 id_home <- function(df, site, year, geno, pheno, blup = TRUE, verbose = TRUE) {
 
+  # Convert the data.frame to data.table if it's not already
+  setDT(df)
+
   # Create the relative phenotype column name
   rel_colname <- paste0('rel_', pheno)
 
   # Make site-year vector for splitting the data
-  site_year <- paste(df[, site], df[, year], sep = '_')
+  df[, site_year := paste0(get(site), "_", get(year))]
 
   # Center and scale performance within site-year using lapply
-  df_list <- split(df, site_year)
+  df_list <- split(df, by = "site_year")
   df_list <- lapply(df_list, function(x) .scale_pheno(x, pheno))
 
   # Merge the data frames back together
   df <- rbindlist(df_list)
 
   # Find the highest relative phenotype for each genotype
-  geno_list <- split(df, df[, geno])
+  geno_list <- split(df, by = geno)
   geno_list <- lapply(geno_list, function(x) .id_top_pheno(x, site, rel_colname, blup, verbose))
 
   # Merge the data frames back together
-  df <- rbindlist(df_list)
+  df <- rbindlist(geno_list)
 
   return(df)
 }

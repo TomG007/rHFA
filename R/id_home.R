@@ -87,7 +87,6 @@
 }
 
 
-
 #' @title Identify the Home Site Based on the Highest Relative Phenotype Value
 #'
 #' @description This function identifies the home site (location) where a given

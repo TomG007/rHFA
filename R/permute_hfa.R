@@ -234,6 +234,8 @@ permute_hfa <- function(data,
   #  begin new code
   #
 
+  popn <- NA
+
   if (!is.na(popn)) {
     print("popn is na")
     data_subset <- na.omit(data[, c(site, year, geno, pheno, popn)])

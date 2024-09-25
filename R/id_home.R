@@ -103,6 +103,7 @@
 #'
 #' @import lme4
 #' @importFrom data.table rbindlist setDT
+#' @importFrom stats coef
 #' @export
 
 id_home <- function(df, site, year, geno, pheno, blup = TRUE, verbose = TRUE) {

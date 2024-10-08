@@ -4,7 +4,7 @@
 \alias{id_home}
 \title{Identify the Home Site Based on the Highest Relative Phenotype Value}
 \usage{
-id_home(df, site, year, geno, pheno, blup = TRUE, verbose = TRUE)
+id_home(df, site, year, geno, pheno, blup = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{df}{A data frame containing performance data by site, year, variety, etc.}

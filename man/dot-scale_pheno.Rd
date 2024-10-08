@@ -13,7 +13,6 @@
 }
 \value{
 A data frame with an additional column containing the scaled values of the specified phenotype.
-The new column will be named `rel_<pheno>`.
 }
 \description{
 This function scales the values of a specified phenotype column in a data frame
